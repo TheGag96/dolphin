@@ -20,7 +20,7 @@ import org.dolphinemu.dolphinemu.features.settings.model.view.SliderSetting;
 import org.dolphinemu.dolphinemu.features.settings.model.view.StringSingleChoiceSetting;
 import org.dolphinemu.dolphinemu.features.settings.model.view.SubmenuSetting;
 import org.dolphinemu.dolphinemu.features.settings.utils.SettingsFile;
-import org.dolphinemu.dolphinemu.services.DirectoryInitializationService;
+import org.dolphinemu.dolphinemu.utils.DirectoryInitialization;
 import org.dolphinemu.dolphinemu.utils.EGLHelper;
 import org.dolphinemu.dolphinemu.utils.Log;
 
@@ -211,6 +211,7 @@ public final class SettingsFragmentPresenter
     Setting speedLimit = null;
     Setting audioStretch = null;
     Setting analytics = null;
+    Setting enableSaveState;
 
     SettingSection coreSection = mSettings.getSection(Settings.SECTION_INI_CORE);
     SettingSection analyticsSection = mSettings.getSection(Settings.SECTION_ANALYTICS);
@@ -221,6 +222,7 @@ public final class SettingsFragmentPresenter
     speedLimit = coreSection.getSetting(SettingsFile.KEY_SPEED_LIMIT);
     audioStretch = coreSection.getSetting(SettingsFile.KEY_AUDIO_STRETCH);
     analytics = analyticsSection.getSetting(SettingsFile.KEY_ANALYTICS_ENABLED);
+    enableSaveState = coreSection.getSetting(SettingsFile.KEY_ENABLE_SAVE_STATES);
 
     // TODO: Having different emuCoresEntries/emuCoresValues for each architecture is annoying.
     // The proper solution would be to have one emuCoresEntries and one emuCoresValues
@@ -257,6 +259,9 @@ public final class SettingsFragmentPresenter
             R.string.speed_limit, 0, 200, "%", 100, speedLimit));
     sl.add(new CheckBoxSetting(SettingsFile.KEY_AUDIO_STRETCH, Settings.SECTION_INI_CORE,
             R.string.audio_stretch, R.string.audio_stretch_description, false, audioStretch));
+    sl.add(new CheckBoxSetting(SettingsFile.KEY_ENABLE_SAVE_STATES, Settings.SECTION_INI_CORE,
+            R.string.enable_save_states, R.string.enable_save_states_description, false,
+            enableSaveState));
     sl.add(new CheckBoxSetting(SettingsFile.KEY_ANALYTICS_ENABLED, Settings.SECTION_ANALYTICS,
             R.string.analytics, 0, false, analytics));
   }
@@ -473,7 +478,7 @@ public final class SettingsFragmentPresenter
     try
     {
       String shadersPath =
-              DirectoryInitializationService.getDolphinInternalDirectory() + "/Shaders";
+              DirectoryInitialization.getDolphinInternalDirectory() + "/Shaders";
       if (!TextUtils.isEmpty(subDir))
       {
         shadersPath += "/" + subDir;

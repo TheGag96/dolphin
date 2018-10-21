@@ -127,10 +127,6 @@ bool Host_RendererIsFullscreen()
   return false;
 }
 
-void Host_ShowVideoConfig(void*, const std::string&)
-{
-}
-
 void Host_YieldToUI()
 {
 }
@@ -246,8 +242,8 @@ JNIEXPORT void JNICALL Java_org_dolphinemu_dolphinemu_NativeLibrary_LoadStateAs(
                                                                                 jobject obj,
                                                                                 jstring path);
 JNIEXPORT void JNICALL
-Java_org_dolphinemu_dolphinemu_services_DirectoryInitializationService_CreateUserDirectories(
-    JNIEnv* env, jobject obj);
+Java_org_dolphinemu_dolphinemu_utils_DirectoryInitialization_CreateUserDirectories(JNIEnv* env,
+                                                                                   jobject obj);
 JNIEXPORT void JNICALL Java_org_dolphinemu_dolphinemu_NativeLibrary_SetUserDirectory(
     JNIEnv* env, jobject obj, jstring jDirectory);
 JNIEXPORT jstring JNICALL
@@ -457,8 +453,7 @@ JNIEXPORT void JNICALL Java_org_dolphinemu_dolphinemu_NativeLibrary_LoadStateAs(
   State::LoadAs(GetJString(env, path));
 }
 
-JNIEXPORT void JNICALL
-Java_org_dolphinemu_dolphinemu_services_DirectoryInitializationService_SetSysDirectory(
+JNIEXPORT void JNICALL Java_org_dolphinemu_dolphinemu_utils_DirectoryInitialization_SetSysDirectory(
     JNIEnv* env, jobject obj, jstring jPath)
 {
   const std::string path = GetJString(env, jPath);
@@ -466,8 +461,8 @@ Java_org_dolphinemu_dolphinemu_services_DirectoryInitializationService_SetSysDir
 }
 
 JNIEXPORT void JNICALL
-Java_org_dolphinemu_dolphinemu_services_DirectoryInitializationService_CreateUserDirectories(
-    JNIEnv* env, jobject obj)
+Java_org_dolphinemu_dolphinemu_utils_DirectoryInitialization_CreateUserDirectories(JNIEnv* env,
+                                                                                   jobject obj)
 {
   UICommon::CreateDirectories();
 }
