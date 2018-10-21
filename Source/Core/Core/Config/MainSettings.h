@@ -94,4 +94,8 @@ extern const ConfigInfo<std::string> MAIN_DUMP_PATH;
 extern const ConfigInfo<std::string> MAIN_FS_PATH;
 extern const ConfigInfo<std::string> MAIN_SD_PATH;
 
+// Sick LXP hacks
+
+extern const ConfigInfo<bool> MAIN_DOUBLE_FPS;
+
 }  // namespace Config

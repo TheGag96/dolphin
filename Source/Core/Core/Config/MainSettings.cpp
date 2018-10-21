@@ -121,4 +121,8 @@ const ConfigInfo<std::string> MAIN_DUMP_PATH{{System::Main, "General", "DumpPath
 const ConfigInfo<std::string> MAIN_FS_PATH{{System::Main, "General", "NANDRootPath"}, ""};
 const ConfigInfo<std::string> MAIN_SD_PATH{{System::Main, "General", "WiiSDCardPath"}, ""};
 
+// Sick LXP hacks
+
+const ConfigInfo<bool> MAIN_DOUBLE_FPS{{System::Main, "Core", "DoubleFPS"}, false };
+
 }  // namespace Config

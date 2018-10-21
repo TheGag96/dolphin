@@ -95,6 +95,14 @@ void AdvancedPane::CreateLayout()
   custom_rtc_description->setWordWrap(true);
   rtc_options->layout()->addWidget(custom_rtc_description);
 
+  // LXP hacks
+  auto* double_fps_options = new QGroupBox(tr("120 FPS Hack"));
+  double_fps_options->setLayout(new QVBoxLayout());
+  main_layout->addWidget(double_fps_options);
+
+  m_double_fps_checkbox = new QCheckBox(tr("Enable 120 FPS Hacks for LXP"));
+  double_fps_options->layout()->addWidget(m_double_fps_checkbox);
+
   main_layout->addStretch(1);
 }
 
@@ -128,6 +136,16 @@ void AdvancedPane::ConnectLayout()
     SConfig::GetInstance().m_customRTCValue = date_time.toTime_t();
     Update();
   });
+
+  // LXP hacks
+  m_double_fps_checkbox->setEnabled(true);
+  m_double_fps_checkbox->setChecked(SConfig::GetInstance().m_DoubleFPS);
+  connect(m_double_fps_checkbox, &QCheckBox::toggled, [this](bool enable_double_fps) {
+    SConfig& config = SConfig::GetInstance();
+    config.m_DoubleFPS = enable_double_fps;
+    config.UpdateDoubleFPS();
+    Update();
+  });
 }
 
 void AdvancedPane::Update()
@@ -154,4 +172,7 @@ void AdvancedPane::Update()
 
   m_custom_rtc_checkbox->setEnabled(!running);
   m_custom_rtc_datetime->setEnabled(enable_custom_rtc_widgets);
+
+  // LXP hacks
+  m_double_fps_checkbox->setChecked(SConfig::GetInstance().m_DoubleFPS);
 }

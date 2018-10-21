@@ -18,16 +18,17 @@ namespace Common
 #define BUILD_TYPE_STR ""
 #endif
 
-const std::string scm_rev_str = "Dolphin "
-#if !SCM_IS_MASTER
-                                "[" SCM_BRANCH_STR "] "
-#endif
+#define XP_VERSION "XP-3.0"
+const std::string scm_rev_str = "Dolphin " XP_VERSION;
+// #if !SCM_IS_MASTER
+//                                 "[" SCM_BRANCH_STR "] "
+// #endif
 
-#ifdef __INTEL_COMPILER
-    BUILD_TYPE_STR SCM_DESC_STR "-ICC";
-#else
-    BUILD_TYPE_STR SCM_DESC_STR;
-#endif
+// #ifdef __INTEL_COMPILER
+//     BUILD_TYPE_STR SCM_DESC_STR "-ICC";
+// #else
+//     BUILD_TYPE_STR SCM_DESC_STR;
+// #endif
 
 const std::string scm_rev_git_str = SCM_REV_STR;
 const std::string scm_desc_str = SCM_DESC_STR;
@@ -35,10 +36,10 @@ const std::string scm_branch_str = SCM_BRANCH_STR;
 const std::string scm_distributor_str = SCM_DISTRIBUTOR_STR;
 
 #ifdef _WIN32
-const std::string netplay_dolphin_ver = SCM_DESC_STR " Win";
-#elif __APPLE__
-const std::string netplay_dolphin_ver = SCM_DESC_STR " Mac";
+const std::string netplay_dolphin_ver = XP_VERSION " Win";
+#elif __APPLE__SCM_DESC_STR
+const std::string netplay_dolphin_ver = XP_VERSION " Mac";
 #else
-const std::string netplay_dolphin_ver = SCM_DESC_STR " Lin";
+const std::string netplay_dolphin_ver = XP_VERSION " Lin";
 #endif
 }  // namespace Common

@@ -29,4 +29,7 @@ private:
 
   QCheckBox* m_custom_rtc_checkbox;
   QDateTimeEdit* m_custom_rtc_datetime;
+
+  // LXP hacks
+  QCheckBox* m_double_fps_checkbox;
 };

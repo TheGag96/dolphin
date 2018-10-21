@@ -47,6 +47,11 @@
 #include "DiscIO/Volume.h"
 #include "DiscIO/WiiWad.h"
 
+#include "Core/ActionReplay.h"
+#include "VideoCommon/VideoConfig.h"
+#include "Core/Config/GraphicsSettings.h"
+#include "Core/Config/MainSettings.h"
+
 SConfig* SConfig::m_Instance;
 
 SConfig::SConfig()
@@ -206,6 +211,10 @@ void SConfig::SaveGameListSettings(IniFile& ini)
 void SConfig::SaveCoreSettings(IniFile& ini)
 {
   IniFile::Section* core = ini.GetOrCreateSection("Core");
+
+  // LXP hacks
+  core->Set("DoubleFPS", m_DoubleFPS);
+  UpdateDoubleFPS();
 
   core->Set("SkipIPL", bHLE_BS2);
   core->Set("TimingVariance", iTimingVariance);
@@ -541,6 +550,10 @@ void SConfig::LoadCoreSettings(IniFile& ini)
   // Default to seconds between 1.1.1970 and 1.1.2000
   core->Get("CustomRTCValue", &m_customRTCValue, 946684800);
   core->Get("EnableSignatureChecks", &m_enable_signature_checks, true);
+
+  // LXP hacks
+  core->Get("DoubleFPS", &m_DoubleFPS, false);
+  UpdateDoubleFPS();
 }
 
 void SConfig::LoadMovieSettings(IniFile& ini)
@@ -1005,4 +1018,39 @@ IniFile SConfig::LoadGameIni(const std::string& id, std::optional<u16> revision)
   for (const std::string& filename : ConfigLoaders::GetGameIniFilenames(id, revision))
     game_ini.Load(File::GetUserPath(D_GAMESETTINGS_IDX) + filename, true);
   return game_ini;
+}
+
+void SConfig::UpdateDoubleFPS()
+{
+  // Config::SetBaseOrCurrent(Config::MAIN_DOUBLE_FPS, m_DoubleFPS);
+  m_EmulationSpeed = m_DoubleFPS ? 0.0f : 1.0f;
+
+  IniFile game_ini_default = SConfig::LoadDefaultGameIni("000100014c585032", 1);
+  IniFile game_ini_local = SConfig::LoadLocalGameIni("000100014c585032", 1);
+  std::string game_ini_file_local = File::GetUserPath(D_GAMESETTINGS_IDX) + "000100014c585032.ini";
+
+  //they probably want VSync on even if they switch off 120 fps
+  if (m_DoubleFPS)
+  {
+    // Config::SetBaseOrCurrent(Config::GFX_VSYNC, true);
+    bEnableCheats = true;
+  }
+
+  //i was getting some bug where this was always turning off, so now it's always on forever :V
+  // Config::SetBaseOrCurrent(Config::GFX_HACK_SKIP_EFB_COPY_TO_RAM, true);
+
+  //turn on all related 120 fps codes
+  auto codes = ActionReplay::LoadCodes(game_ini_default, game_ini_local);
+
+  for (ActionReplay::ARCode& code : codes)
+  {
+    std::string prefix = "{120 FPS}";
+    if (code.name.size() >= prefix.size() && code.name.find(prefix) != std::string::npos)
+    {
+      code.active = m_DoubleFPS;
+    }
+  }
+
+  ActionReplay::SaveCodes(&game_ini_local, codes);
+  game_ini_local.Save(game_ini_file_local);
 }

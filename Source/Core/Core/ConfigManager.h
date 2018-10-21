@@ -293,6 +293,9 @@ struct SConfig
   int m_Volume;
   std::string sBackend;
 
+  // LXP hacks
+  bool m_DoubleFPS;
+
 #ifdef _WIN32
   // WSAPI settings
   std::string sWASAPIDevice;
@@ -329,6 +332,8 @@ struct SConfig
   static SConfig& GetInstance() { return (*m_Instance); }
   static void Init();
   static void Shutdown();
+
+  void UpdateDoubleFPS();
 
 private:
   SConfig();
