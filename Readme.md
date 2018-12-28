@@ -1,4 +1,11 @@
-# Dolphin - A GameCube and Wii Emulator
+# Dolphin XP
+
+This is a build of Dolphin made for the users of Super Smash Bros. Legacy XP. It's got some hacky additions like:
+
+* 120 FPS checkbox that enables a code for LXP and audio speed halving
+* SD card speedhack for our giant SDHC sd.raw
+
+# Original Dolphin Readme
 
 [Homepage](https://dolphin-emu.org/) | [Project Site](https://github.com/dolphin-emu/dolphin) | [Forums](https://forums.dolphin-emu.org/) | [Wiki](https://wiki.dolphin-emu.org/) | [Issue Tracker](https://bugs.dolphin-emu.org/projects/emulator/issues) | [Coding Style](https://github.com/dolphin-emu/dolphin/blob/master/Contributing.md) | [Transifex Page](https://www.transifex.com/projects/p/dolphin-emu/)
 
