@@ -543,10 +543,6 @@ void Renderer::UpdateDrawRectangle()
     crop_width = win_width;
   }
 
-  // Clamp the draw width/height to the screen size, to ensure we don't render off-screen.
-  draw_width = std::min(draw_width, win_width);
-  draw_height = std::min(draw_height, win_height);
-
   // ensure divisibility by 4 to make it compatible with all the video encoders
   draw_width = std::ceil(draw_width) - static_cast<int>(std::ceil(draw_width)) % 4;
   draw_height = std::ceil(draw_height) - static_cast<int>(std::ceil(draw_height)) % 4;
@@ -751,10 +747,18 @@ void Renderer::Swap(u32 xfbAddr, u32 fbWidth, u32 fbStride, u32 fbHeight, const 
 
       Core::Callback_VideoCopiedToXFB(true);
     }
+    else
+    {
+      Flush();
+    }
 
     // Update our last xfb values
     m_last_xfb_width = (fbStride < 1 || fbStride > MAX_XFB_WIDTH) ? MAX_XFB_WIDTH : fbStride;
     m_last_xfb_height = (fbHeight < 1 || fbHeight > MAX_XFB_HEIGHT) ? MAX_XFB_HEIGHT : fbHeight;
+  }
+  else
+  {
+    Flush();
   }
 }
 
